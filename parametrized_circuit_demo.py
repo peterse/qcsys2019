@@ -1,7 +1,6 @@
 import sys
 import numpy as np
 
-import matplotlib.pyplot as plt
 from matplotlib import cm, colors
 
 import sympy
@@ -12,7 +11,7 @@ import qutip
 
 def cost_function(state, truth):
     """Compute 1 - <state|truth> on `state`, a single-qubit wavefunction."""
-    return 1 - np.abs(np.dot(state, truth))**2
+    return np.abs(np.dot(state.conj(), truth))**2
 
 
 def state_array_to_qobj(state):
@@ -31,14 +30,6 @@ def state_array_to_qobj(state):
 
 def main():
 
-    """
-    In this exercise, students will attempt to optimize the parameters of
-    a circuit without knowing the actual contents of the circuit. This is
-    supposed to demonstrate the difficulty that 'black box optimizers' face
-    when dealing with quantum circuits.
-    """
-
-    # set up initial circuit
     circuit = cirq.Circuit.from_ops(cirq.Rx(sympy.Symbol("x"))(cirq.LineQubit(0)))
 
     # initialize the current state and target state

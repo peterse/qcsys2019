@@ -1,7 +1,18 @@
+"""
+Hello QCSYSer!
+
+In this exercise, students will attempt to optimize the parameters of
+a circuit without knowing the actual contents of the circuit. Through this
+activity students wilL *hopefully* reinvent some primitive form of gradient
+descent, and so understand intuitively how a gradient-based optimizer works.
+This will also demonstrate the difficulty that 'black box optimizers' face
+when dealing with quantum circuits - i.e. variance of trigonometric functions
+that can be either very large or vanishing.
+"""
 import sys
+from os import system
 import numpy as np
 
-import matplotlib.pyplot as plt
 from matplotlib import cm, colors
 
 import sympy
@@ -31,13 +42,6 @@ def state_array_to_qobj(state):
 
 def main():
 
-    """
-    In this exercise, students will attempt to optimize the parameters of
-    a circuit without knowing the actual contents of the circuit. This is
-    supposed to demonstrate the difficulty that 'black box optimizers' face
-    when dealing with quantum circuits.
-    """
-
     # set up initial circuit
     params = [1.2, 2.9, 0.1]
     symbols = [sympy.Symbol(f"x{i}") for i in range(1,4)]
@@ -65,6 +69,7 @@ def main():
     colors_cache = []
 
     # main routine:
+    system('clear')
     print("Welcome. Prepare to optimize a PQC.")
     print("\tRed colors mean you're approaching the optimum")
     print("\tBlue colors mean you're moving away from the optimum")
@@ -104,11 +109,12 @@ def main():
         b.add_states(current_vec)
         b.add_states(points_cache)
         print("Current loss: {} \n".format(current_loss))
+        # qutip's garbage mpl interface prevents fig management with gca()
         b.show()
         # 3) stage points cache for _next_ iteration
         points_cache.append(current_vec)
         print(current_vec)
-        colors_cache.append(colors.to_hex(rdbu(1 - current_loss), keep_alpha=False))
+        colors_cache.append(colors.to_hex(rdbu(current_loss), keep_alpha=False))
 
 if __name__ == "__main__":
     main()
