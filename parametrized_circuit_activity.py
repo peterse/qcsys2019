@@ -113,7 +113,6 @@ def main():
         b.show()
         # 3) stage points cache for _next_ iteration
         points_cache.append(current_vec)
-        print(current_vec)
         colors_cache.append(colors.to_hex(rdbu(current_loss), keep_alpha=False))
 
 if __name__ == "__main__":
