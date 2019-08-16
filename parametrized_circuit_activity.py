@@ -20,7 +20,6 @@ import cirq
 import qutip
 
 
-
 def cost_function(state, truth):
     """Compute 1 - <state|truth> on `state`, a single-qubit wavefunction."""
     return 1 - np.abs(np.dot(state.conj(), truth))**2
@@ -28,16 +27,6 @@ def cost_function(state, truth):
 
 def state_array_to_qobj(state):
     return (state[0]*qutip.basis(2,0) + state[1]*qutip.basis(2,1)).unit()
-
-
-# def view_colormap(cmap):
-#     """Plot a colormap with its grayscale equivalent"""
-#     cmap = plt.cm.get_cmap(cmap)
-#     colors = cmap(np.arange(cmap.N))
-#     fig, ax = plt.subplots(1, figsize=(6, 2),
-#                            subplot_kw=dict(xticks=[], yticks=[]))
-#     ax.imshow([colors], extent=[0, 10, 0, 1])
-#     plt.show()
 
 
 def main():
@@ -73,8 +62,6 @@ def main():
     print("Welcome. Prepare to optimize a PQC.")
     print("\tRed colors mean you're approaching the optimum")
     print("\tBlue colors mean you're moving away from the optimum")
-
-    # while np.abs(current_loss) > 1e-4:
     for k in range(3000):
         # 0) reset Bloch sphere and stage plotting of points cache
         # Plot current state as black, previous ones according to heatmap
@@ -99,6 +86,7 @@ def main():
                 sys.exit()
         # be sneaky and make one parameter do nothing
         params = params[:2] + [params[3]]
+
         # 2) Simulate the new state
         current_state = cirq.Simulator().simulate(
             circuit, param_resolver=dict(zip(symbols, params))).final_state
@@ -111,9 +99,11 @@ def main():
         print("Current loss: {} \n".format(current_loss))
         # qutip's garbage mpl interface prevents fig management with gca()
         b.show()
+
         # 3) stage points cache for _next_ iteration
         points_cache.append(current_vec)
         colors_cache.append(colors.to_hex(rdbu(current_loss), keep_alpha=False))
+
 
 if __name__ == "__main__":
     main()
